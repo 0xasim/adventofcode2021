@@ -16,6 +16,7 @@ for line in A:
   x1, y1, x2, y2 = line[0][0], line[0][1], line[1][0], line[1][1]
   # one shared axis
   if (xm := x1 == x2) or (ym := y1 == y2):
+    print((x1,y1),(x2,y2), '; nondiag')
     if xm:
       lim = sorted([y1, y2])
       for ny in range(lim[0], lim[1] + 1):
@@ -28,15 +29,19 @@ for line in A:
   # diagonals
   else:
     mini, maxi = sorted([int(str(x1)+str(y1)), int(str(x2)+str(y2))])
-    if (diff := maxi - mini) % 9 == 0 and maxi != mini or mini == 0:
+    if (diff := maxi - mini) % 9 == 0 and maxi != mini or diff % 11 == 0:
+      if diff % 9 == 0: wd = 9
+      if diff % 11 == 0: wd = 11
+      print((x1,y1),(x2,y2),'; DIAG')
       diff = maxi - mini
-      while diff > 0:
+      while diff >= 0:
         diff = maxi - mini
         ddI = str(int(maxi))
         if len(ddI) < 2: ddI = "0"+ddI
         ddx, ddy = int(ddI[0]), int(ddI[1])
+      # print(ddx,ddy)
         floor[ddy][ddx] += 1
-        maxi -= 9
+        maxi -= wd
         diff = maxi - mini
 
 
@@ -54,4 +59,4 @@ for i in floor:
     if j >= 2:
       tot += 1
 
-print(tot)
+print(tot, "points.")
